@@ -1,0 +1,106 @@
+Base de datos de secuencias de comandos
+crear base de datos piaBase;
+use piaBase;
+
+crear tabla beca 
+  id_beca INT NO NULO,
+  porcentaje INT NULL,
+  tipo_beca VARCHAR (45) NULL,
+  LLAVE PRIMARIA (id_beca)
+  );
+
+CREAR TABLA SI NO EXISTE alumno ( 
+  id_alumno INT NO NULO,
+  nombre VARCHAR (45) NULL,
+  edad INT NULL,
+  telefono VARCHAR (45) NULL,
+  semestre TINYINT NULL,
+  escolaridad VARCHAR (45) NULL,
+  fk_idbeca INT NO NULO,
+  CLAVE PRIMARIA (id_alumno),
+  la clave externa (fk_idbeca) hace referencia a beca (id_beca)
+  );
+  
+
+CREAR TABLA SI NO EXISTE campus (#Campus: id, nombre
+  id_facu INT NO NULO,
+  nombre VARCHAR (45) NULL,
+  LLAVE PRIMARIA (`id_facu`)
+  );
+  
+  CREAR TABLA SI NO EXISTE aula (#Aula: id, num, id facu
+  id_aula INT NO NULO,
+  num_aula SMALLINT NULL,
+  fk_idfacu INT NO NULO,
+  LLAVE PRIMARIA (id_aula),
+  la clave externa (fk_idfacu) hace referencia al campus (id_facu)
+  );
+  
+  CREAR TABLA SI NO EXISTE maestro (#Maestro: id, nombre, telefono, id alumno, aula
+  id_maestro INT NO NULO,
+  nombre VARCHAR (45) NULL,
+  telefono VARCHAR (45) NULL,
+  fk_idAlumno INT NO NULO,
+  fk_idAula INT NO NULO,
+  LLAVE PRIMARIA (id_maestro),
+  la clave externa (fk_idAlumno) hace referencia al alumno (id_alumno),
+  la clave externa (fk_idAula) hace referencia a aula (id_aula)
+  );
+  
+  CREAR TABLA SI NO EXISTE materia (#Materia: id, nombre, id alumno, id maestro
+  idmateria SMALLINT NOT NULL,
+  nombre VARCHAR (45) NULL,
+  fk_idAlumno INT NO NULO,
+  fk_idMaestro INT NO NULO,
+  LLAVE PRIMARIA (idmateria),
+  la clave externa (fk_idAlumno) hace referencia al alumno (id_alumno),
+  la clave externa (fk_idMaestro) hace referencia al maestro (id_maestro)
+  );
+ Inserta los datos con método transacción 
+#Beca: id, porcentaje, tipo
+INICIAR TRANSACCIÓN;
+INSERTAR EN Beca VALORES ('101', '80', 'bajos recursos');
+INSERTAR EN Beca VALORES ('102', '70', 'bajos recursos');
+INSERTAR EN Beca VALUES ('103', '50', 'bajos recursos');
+INSERT INTO Beca VALUES ('104', '25', 'bajos recursos');
+cometer;
+
+ #Alumnos: id, nombre, edad, telefono, semestre, escolaridad, id beca
+INICIAR TRANSACCIÓN;
+INSERTAR EN ALUMNO VALORES (1000, 'Rodrigo', '19', '8123021825', '4', 'universidad', '101');
+INSERTAR EN ALUMNO VALORES (1002, 'Ernesto', '20', '8123021824', '4', 'universidad', '101');
+INSERTAR EN ALUMNO VALORES (1003, 'José', '19', '8123021823', '4', 'universidad', '104');
+INSERTAR EN ALUMNO VALORES (1004, 'Rodolfo', '23', '8123021822', '4', 'universidad', '103');
+cometer;
+
+#Campus: id, nombre
+INICIAR TRANSACCIÓN;
+INSERTAR EN EL campus VALORES ('10', 'Mederos');
+INSERTAR LOS VALORES EN EL campus ('11', 'San nicolas');
+INSERTAR LOS VALORES DEL campus ('12', 'Ayende');
+cometer;
+
+#Aula: id, num, id facu
+INICIAR TRANSACCIÓN;
+INSERTAR EN Aula VALORES ('001', '10', '10');
+INSERTAR EN Aula VALORES ('002', '11', '10');
+INSERTAR EN Aula VALORES ('003', '12', '11');
+INSERTAR EN Aula VALORES ('004', '13', '12');
+cometer;
+
+#Maestro: id, nombre, telefono, id alumno, aula
+INICIAR TRANSACCIÓN;
+INSERTAR EN maestro VALORES ('1010', 'Javier', '8180291010', '1003', '001');
+INSERT INTO maestro VALORES ('1011', 'Javier', '8180291010', '1002', '003');
+INSERTAR EN maestro VALORES ('1012', 'Javier', '8180291010', '1002', '001');
+INSERTAR EN maestro VALORES ('1013', 'Javier', '8180291010', '1004', '004');
+INSERT INTO maestro VALUES ('1014', 'Javier', '8180291010', '1000', '002');
+cometer;
+
+#Materia: id, nombre, id alumno, id maestro
+INICIAR TRANSACCIÓN;
+INSERT INTO materia VALUES ('11', 'Prgramacion', '1000', '1010');
+INSERTAR EN Materia VALORES ('12', 'Base de datos', '1003', '1011');
+INSERTAR EN Materia VALORES ('13', 'Derecho', '1002', '1012');
+INSERT INTO materia VALUES ('14', 'Administración', '1004', '1013');
+cometer;
